@@ -46,7 +46,11 @@ public class IPCServer {
 							buffer.flip();
 							content += charset.decode(buffer);
 						}
-						System.out.println("=====" + content);
+						System.out.println("server=====" + content);
+						String[] strs = content.split("\r\n");
+						for(int i = 0; i < strs.length;i++){
+							System.out.println("server parse is "+strs[i]);
+						}
 						sk.interestOps(SelectionKey.OP_READ);
 					}catch(IOException ex){
 						sk.cancel();
