@@ -9,12 +9,21 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 public class IPCServer {
+	
+	
 	
 	private Selector selector = null;
 	
 	private Charset charset = Charset.forName("UTF-8");
+	
+	Map<SocketChannel,List> topicOfChannels = new HashMap<SocketChannel,List>();
 	
 	public void init() throws IOException
 	{
@@ -30,6 +39,8 @@ public class IPCServer {
 				selector.selectedKeys().remove(sk);
 				if(sk.isAcceptable()){
 					SocketChannel sc = server.accept();
+					List<String> topics = new ArrayList<>();
+					topicOfChannels.put(sc, topics);
 					sc.configureBlocking(false);
 					sc.register(selector, SelectionKey.OP_READ);
 					sk.interestOps(SelectionKey.OP_ACCEPT);
@@ -50,6 +61,9 @@ public class IPCServer {
 						String[] strs = content.split("\r\n");
 						for(int i = 0; i < strs.length;i++){
 							System.out.println("server parse is "+strs[i]);
+						}
+						if("request".equals(strs[0])){
+							doRequest(sc,strs);
 						}
 						sk.interestOps(SelectionKey.OP_READ);
 					}catch(IOException ex){
@@ -76,7 +90,11 @@ public class IPCServer {
 	/**
 	 * deal with request
 	 */
-	private void doRequest(String[] args){
+	private void doRequest(SocketChannel sc,String[] args){
+		System.out.println("doRequest");
+		if(ServerConfig.REQUEST.equals(args[1])){
+			System.out.println("subscribe " + args[2]);
+		}
 		
 	}
 	
