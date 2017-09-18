@@ -73,6 +73,22 @@ public class IPCServer {
 		
 	}
 	
+	/**
+	 * deal with request
+	 */
+	private void doRequest(String[] args){
+		
+	}
+	
+	/**
+	 * deal with response
+	 * @param args
+	 * @throws IOException
+	 */
+	private void doResponse(String[] args){
+		
+	}
+	
 	public static void main(String[] args) throws IOException {
 		new IPCServer().init();
 	}
